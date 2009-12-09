@@ -1,0 +1,64 @@
+TOKENS {
+    NUMBER -> (-|+)?[0-9]+
+    BOOLEAN -> true|false
+    STRING -> ".*"
+    IDENTIFIER -> [a-zA-Z_][a-zA-Z_0-9]
+
+    PUNC_SEMI -> ;
+    PUNC_COMMA -> ,
+    OP_ASSIGN -> =
+    BINARY_OP -> +|-|*|/|%|~
+    KEY_OUT -> out
+    KEY_IN -> in
+
+    TYPE -> number|boolean|string
+}
+
+
+
+
+program -> statement_list ;
+
+statement_list -> statement statement_list
+                | statement
+                ;
+
+statement -> statement_type PUNC_SEMI ;
+
+statement_type -> declaration
+                | assignment
+                | console_out
+                | console_in
+                ;
+
+declaration -> TYPE IDENTIFIER
+                | TYPE IDENTIFIER OP_ASSIGN expression
+               ;
+
+assignment -> IDENTIFIER OP_ASSIGN expression ;
+
+console_out -> KEY_OUT expression_list ;
+
+console_in -> KEY_IN identifier_list ;
+
+expression_list -> expression PUNC_COMMA expression_list
+                    | expression
+                    ;
+
+expression -> factor BINARY_OP expression
+                | factor
+                ;
+
+factor ->   NUMBER | BOOLEAN | STRING | IDENTIFIER;
+
+
+int a = 5;
+int b = 6;
+int c = a + b + 5;
+
+
+out "foobar", c;
+
+in a, b, c;
+
+print "a = ", a, "b = ", b, "c = ", c, "\n";
