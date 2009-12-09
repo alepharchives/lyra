@@ -1,0 +1,13 @@
+number num_a;
+number num_b, num_c, num_d;
+
+string str_b;
+string str_d, str_e, str_f;
+
+boolean bool_a;
+boolean bool_b, bool_c, bool_d;
+
+
+stdout num_a, num_b, num_c, num_d;
+stdout str_b, str_d, str_e, str_f;
+stdout bool_a, bool_b, bool_c, bool_d;

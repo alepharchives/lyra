@@ -1,0 +1,16 @@
+number num_a = 0;
+number num_b = 5;
+number num_c = 10;
+
+string str_b = "Hello ";
+string str_d = "World ";
+string str_e = "Again\n";
+
+boolean bool_a = true;
+boolean bool_b = false;
+boolean bool_c = false;
+
+
+stdout num_a, num_b, num_c;
+stdout str_b, str_d, str_e;
+stdout bool_a, bool_b, bool_c;

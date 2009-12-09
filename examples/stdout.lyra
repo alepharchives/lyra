@@ -1,0 +1,8 @@
+stdout "Hello Lyra World\n";
+stdout "Hello, my name is ", "Lyra compiler";
+stdout "This is line number ", 3;
+stdout "We can try ", 55, " time to do ", 5+5, " things\n";
+stdout 5;
+stdout 5 + 5;
+stdout false;
+stdout true;

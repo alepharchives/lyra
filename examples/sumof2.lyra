@@ -1,1 +1,5 @@
-print "The sum of 3 and 5 = ", 3+5;
+number a = 5;
+number b = 6;
+number c = a + b;
+
+stdout "The sum of ", a, "and ", b, "is ", c;
