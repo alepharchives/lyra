@@ -1,10 +1,11 @@
-all: lyrac
+all: ../bin/lyrac
 	@echo "All done"
 
 CC=gcc
 CFLAGS=-Wall -I../include
 
-lyrac: y.tab.c lex.yy.c main.c
+../bin/lyrac: y.tab.c lex.yy.c main.c 
+	@mkdir -p ../bin
 	$(CC) -o $@ $+ -lgc
 
 lex.yy.c: ../spec/lyra.l
@@ -18,4 +19,4 @@ clean:
 	rm -f lex.yy.c
 	rm -f y.tab.*
 	rm -f *.o
-	rm -f lyra
+	rm -rf bin
