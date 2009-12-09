@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gc.h>
 #include "../include/lyra.h"
 #include "../src/y.tab.h"
 
@@ -16,21 +17,31 @@ int yywrap()
 
 int usage()
 {
-    fprintf(stderr, "Usage: janec <file.j>\n");
+    fprintf(stderr, "Usage: lyrac <filename.lyra>\n");
 }
 
 char* get_outfile(const char* infile)
 {
-    int l = strlen(infile);
-    int extlen = l - 2;
+    const char* ext = ".lyra";
+    const int extlen = strlen(ext);
 
-    if(strncmp(".j", infile+extlen, 2) != 0) {
-        fprintf(stderr, "Unknown file extension. Should be '.j'\n", infile+extlen);
+    int infile_full_len = strlen(infile);
+    int infile_name_len = infile_full_len - extlen;
+    const char* infile_extp = infile + infile_name_len;
+
+    if(strncmp(ext, infile_extp, extlen) != 0) {
+        fprintf(stderr, "Unknown file extension. Should be '%s'\n", ext);
         exit(1);
     }
 
-    char *outfile = strndup(infile, l);
-    strncpy(outfile+extlen, ".c", 2);
+    const char* outext = ".c";
+    const int outextlen = strlen(outext);
+
+    int outfile_full_len = infile_name_len + outextlen + 1;
+    char *outfile = GC_malloc(sizeof(char) * outfile_full_len);
+    memcpy(outfile, infile, infile_name_len);
+    memcpy(outfile+infile_name_len, outext, outextlen);
+    outfile[outfile_full_len] = '\0';
     return outfile;
 }
 
@@ -49,10 +60,8 @@ int main(int argc, char** argv)
 
     fclose(stdout);
     stdout = fopen(outfilename, "w"); 
-    free(outfilename);
 
     yyparse();
 
     return 0;
 }
-
