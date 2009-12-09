@@ -2,3 +2,6 @@ lyrac
 *.o
 commit
 diff
+lex.yy.c
+y.tab.c
+y.tab.h
