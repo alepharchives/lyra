@@ -1,4 +1,9 @@
 %{
+    #include <stdlib.h>
+    #include <ast.h>
+    #include "../src/y.tab.h"
+
+    Ast rootAst;
 %}
 
 %union {
@@ -8,6 +13,7 @@
     int binop;
     char* identifier;
     char* string;
+    void* ast;
 }
 
 %token T_TERMINATOR T_SEPARATOR
@@ -22,48 +28,74 @@
 
 %%
 
-program: statement_list;
+program: statement_list {
+            rootAst = $<ast>1;
+        };
 
-statement_list: statement statement_list
+statement_list: statement statement_list {
+                    $<ast>$ = ast_next_set($<ast>1, $<ast>2);
+                }
                 |
-                statement
+                statement { $<ast>$ = $<ast>1; }
                 ;
 
-statement: statement_type T_TERMINATOR;
+statement: statement_type T_TERMINATOR { $<ast>$ = $<ast>1; };
 
-statement_type: declaration
-                | assignment
-                | console_out
-                | console_in
+statement_type: declaration { $<ast>$ = $<ast>1; }
+                | initialization { $<ast>$ = $<ast>1; }
+                | assignment { $<ast>$ = $<ast>1; }
+                | console_out { $<ast>$ = $<ast>1; }
+                | console_in { $<ast>$ = $<ast>1; }
                 ;
 
-declaration: T_TYPE T_IDENTIFIER T_OP_ASSIGN expression
-             | 
-             T_TYPE T_IDENTIFIER
+declaration: T_TYPE identifier_list {
+                 $<ast>$ = ast_declare_new($<type>1, $<ast>2);
+             }
              ;
 
-assignment: T_IDENTIFIER T_OP_ASSIGN expression;
+initialization: T_TYPE T_IDENTIFIER T_OP_ASSIGN expression {
+                 $<ast>$ = ast_init_new($<type>1, $<identifier>2, $<ast>4);
+             }
+             ;
 
-console_out: T_KEY_PRINT expression_list;
+assignment: T_IDENTIFIER T_OP_ASSIGN expression {
+                $<ast>$ = ast_assign_new($<identifier>1, $<ast>3);
+            };
 
-console_in: T_KEY_READ identifier_list;
+console_out: T_KEY_PRINT expression_list {
+                 $<ast>$ = ast_print_new($<ast>1);
+             };
 
-expression_list: expression T_SEPARATOR expression_list
-                | expression
+console_in: T_KEY_READ identifier_list { 
+                $<ast>$ = ast_read_new($<ast>1); 
+            };
+
+expression_list: expression T_SEPARATOR expression_list {
+                     $<ast>$ = ast_explist_new($<ast>1, $<ast>3);
+                 }
+                | expression {
+                    $<ast>$ = ast_explist_new($<ast>1, NULL);
+                }
                 ;
 
-identifier_list: T_IDENTIFIER T_SEPARATOR identifier_list
-                | T_IDENTIFIER
-                ;
-
-expression: factor T_OP_BINARY expression
-            | factor
+expression: factor T_OP_BINARY expression {
+                $<ast>$ = ast_binaryop_new($<binop>2, $<ast>1, $<ast>3);
+            }
+            | factor { $<ast>$ = $<ast>1; }
             ;
 
-factor: T_NUMBER 
-        | T_BOOLEAN
-        | T_STRING
-        | T_IDENTIFIER
-        ;
+identifier_list: T_IDENTIFIER T_SEPARATOR identifier_list {
+                     $<ast>$ = ast_idlist_new($<identifier>1, $<ast>3);
+                 }
+                | T_IDENTIFIER { 
+                    $<ast>$ = ast_idlist_new($<identifier>1, NULL); 
+                }
+                ;
 
+
+factor: T_NUMBER { $<ast>$ = ast_number_new($<number>1); }
+        | T_BOOLEAN { $<ast>$ = ast_boolean_new($<boolean>1); }
+        | T_STRING { $<ast>$ = ast_string_new($<string>1); }
+        | T_IDENTIFIER { $<ast>$ = ast_identifier_new($<identifier>1); }
+        ;
 %%
