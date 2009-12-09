@@ -2,11 +2,11 @@ all: ../bin/lyrac
 	@echo "All done"
 
 CC=gcc
-CFLAGS=-Wall -I../include
+CFLAGS=-I../include
 
 ../bin/lyrac: y.tab.c lex.yy.c main.c 
 	@mkdir -p ../bin
-	$(CC) -o $@ $+ -lgc
+	$(CC) $(CFLAGS) -o $@ $+ -lgc
 
 lex.yy.c: ../spec/lyra.l
 	flex $<

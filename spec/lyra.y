@@ -5,18 +5,21 @@
     int number;
     int boolean;
     int type;
+    int binop;
     char* identifier;
     char* string;
 }
 
 %token T_TERMINATOR T_SEPARATOR
-%token T_OP_ASSIGN T_OP_BINARY
+%token T_OP_ASSIGN
 %token T_KEY_READ T_KEY_PRINT
 %token <type> T_TYPE 
 %token <boolean> T_BOOLEAN 
 %token <identifier> T_IDENTIFIER 
 %token <string> T_STRING 
 %token <number> T_NUMBER
+%token <binop> T_OP_BINARY
+
 %%
 
 program: statement_list;
