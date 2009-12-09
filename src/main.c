@@ -58,9 +58,6 @@ int main(int argc, char** argv)
     fclose(stdin);
     stdin = fopen(infilename, "r"); 
 
-    fclose(stdout);
-    stdout = fopen(outfilename, "w"); 
-
     yyparse();
 
     return 0;
