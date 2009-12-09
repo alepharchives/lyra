@@ -4,7 +4,7 @@ all: ../bin/lyrac
 CC=gcc
 CFLAGS=-I../include
 
-../bin/lyrac: y.tab.c lex.yy.c main.c 
+../bin/lyrac: y.tab.c lex.yy.c main.o ast.o
 	@mkdir -p ../bin
 	$(CC) $(CFLAGS) -o $@ $+ -lgc
 
