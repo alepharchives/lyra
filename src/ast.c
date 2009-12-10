@@ -4,6 +4,10 @@
 #include <gc.h>
 #include <ast.h>
 
+static void ast_indent(int);
+static void ast_type_printf(Ast);
+static void ast_value_printf(Ast,int);
+
 struct _Ast {
     AstType type;
 
@@ -156,5 +160,47 @@ Ast ast_next_set(Ast ast, Ast next)
 
 void ast_printf(Ast ast, int indent)
 {
-    printf("printing ast\n");
+    if(ast == NULL) {
+        return;
+    }
+
+    ast_indent(indent);
+    ast_type_printf(ast);
+    ast_value_printf(ast, indent+1);
+    ast_printf(ast->next, indent);
+}
+
+/* private functions */
+
+void ast_indent(int n)
+{
+    int i;
+
+    for(i=0; i < n; i++) {
+        printf(" ");
+    }
+
+    printf("-");
+}
+
+void ast_type_printf(Ast ast)
+{
+    switch(ast->type) {
+        case IDENTIFIER: printf("IDENTIFIER ");break;
+        case STRING: printf("STRING ");break;
+        case BOOLEAN: printf("BOOLEAN ");break;
+        case NUMBER: printf("NUMBER ");break;
+        case OP_BINARY: printf("OP_BINARY ");break;
+        case STATEMENT_READ: printf("STMT_READ ");break;
+        case STATEMENT_PRINT: printf("STMT_PRINT ");break;
+        case STATEMENT_ASSIGN: printf("STMT_ASSIGN ");break;
+        case STATEMENT_INIT: printf("STMT_INIT ");break;
+        case STATEMENT_DECLARE: printf("STMT_DECLARE ");break;
+        default: fprintf(stderr, "UNKNOWN AST TYPE\n");exit(1);
+    }
+}
+
+void ast_value_printf(Ast ast, int indent)
+{
+    printf("\n");
 }
