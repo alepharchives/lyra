@@ -10,6 +10,10 @@
                                  a->lineno = 0; \
                                  if(1) \
 
+typedef struct _Ast* Ast;
+
+extern Ast rootAst;
+
 
 typedef enum {
     IDENTIFIER,
@@ -24,7 +28,6 @@ typedef enum {
     STATEMENT_DECLARE
 } AstType;
 
-typedef struct _Ast* Ast;
 
 Ast ast_identifier_new(const char*);
 Ast ast_string_new(const char*);
@@ -40,6 +43,6 @@ Ast ast_init_new(int,const char*,Ast);
 Ast ast_declare_new(int,Ast);
 Ast ast_next_set(Ast,Ast);
 
-void ast_printf(Ast);
+void ast_printf(Ast,int);
 
 #endif

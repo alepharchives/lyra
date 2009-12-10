@@ -153,3 +153,8 @@ Ast ast_next_set(Ast ast, Ast next)
     ast->next = next;
     return ast;
 }
+
+void ast_printf(Ast ast, int indent)
+{
+    printf("printing ast\n");
+}
