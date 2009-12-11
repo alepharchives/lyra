@@ -9,7 +9,7 @@
 ;                        return T_TERMINATOR;
 ,                        return T_SEPARATOR;
 =                        return T_OP_ASSIGN;
-\+|\-|\*|\/|\%|\~        yylval.binop=(int) yytext; return T_OP_BINARY;
+\+|\-|\*|\/|\%|\~        yylval.binop= yytext[0]; return T_OP_BINARY;
 stdout                   return T_KEY_PRINT;
 stdin                    return T_KEY_READ;
 number                   yylval.type=L_NUMBER;return T_TYPE;
@@ -21,5 +21,5 @@ false                    yylval.boolean=L_FALSE;return T_BOOLEAN;
 \".*\"                   yylval.string=strdup(yytext);return T_STRING;
 [0-9]+                   yylval.number=atoi(yytext);return T_NUMBER;
 [ \t\n]                  ;
-.                        return (int) yytext;
+.                        return yytext[0];
 %%
