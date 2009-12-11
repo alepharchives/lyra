@@ -7,6 +7,16 @@
 static void ast_indent(int);
 static void ast_type_printf(Ast);
 static void ast_value_printf(Ast,int);
+static void ast_identifier_printf(Ast);
+static void ast_string_printf(Ast);
+static void ast_number_printf(Ast);
+static void ast_boolean_printf(Ast);
+static void ast_binop_printf(Ast,int);
+static void ast_stmt_read_printf(Ast,int);
+static void ast_stmt_print_printf(Ast,int);
+static void ast_stmt_assign_printf(Ast,int);
+static void ast_stmt_init_printf(Ast,int);
+static void ast_stmt_declare_printf(Ast,int);
 
 struct _Ast {
     AstType type;
@@ -196,5 +206,95 @@ void ast_type_printf(Ast ast)
 
 void ast_value_printf(Ast ast, int indent)
 {
+    switch(ast->type) {
+        case IDENTIFIER: ast_identifier_printf(ast);break;
+        case STRING: ast_string_printf(ast);break;
+        case NUMBER: ast_number_printf(ast);break;
+        case BOOLEAN: ast_boolean_printf(ast);break;
+        case OP_BINARY: ast_binop_printf(ast, indent);break;
+        case STATEMENT_READ: ast_stmt_read_printf(ast, indent);break;
+        case STATEMENT_PRINT: ast_stmt_print_printf(ast, indent);break;
+        case STATEMENT_ASSIGN: ast_stmt_assign_printf(ast, indent);break;
+        case STATEMENT_INIT: ast_stmt_init_printf(ast, indent);break;
+        case STATEMENT_DECLARE: ast_stmt_declare_printf(ast, indent);break;
+        default: fprintf(stderr, "UNKNOWN AST TYPE\n");exit(1);
+    }
+}
+
+void ast_identifier_printf(Ast ast)
+{
+    printf(" [%s]\n", ast->value.identifier);
+}
+
+void ast_string_printf(Ast ast)
+{
+    printf(" [%s]\n", ast->value.string);
+}
+
+void ast_number_printf(Ast ast)
+{
+    printf(" [%d]\n", ast->value.number);
+}
+
+void ast_boolean_printf(Ast ast)
+{
+    if(ast->value.boolean == L_TRUE) {
+        printf(" [true]\n");
+    } else {
+        printf(" [false]\n");
+    }
+}
+
+void ast_binop_printf(Ast ast, int indent)
+{
+    printf(" [%c]\n", ast->value.binop.operator);
+    ast_printf(ast->value.binop.left, indent);
+    ast_printf(ast->value.binop.right, indent);
+}
+
+void ast_stmt_read_printf(Ast ast, int indent)
+{
     printf("\n");
+    ast_printf(ast->value.stmt_read.idlist, indent);
+}
+
+void ast_stmt_print_printf(Ast ast, int indent)
+{
+    printf("\n");
+    ast_printf(ast->value.stmt_print.explist, indent);
+}
+
+void ast_stmt_assign_printf(Ast ast, int indent)
+{
+    printf(" [%s]\n", ast->value.stmt_assign.key);
+    ast_printf(ast->value.stmt_assign.value, indent);
+}
+
+void ast_stmt_init_printf(Ast ast, int indent)
+{
+    const char* type;
+
+    switch(ast->value.stmt_init.type) {
+        case L_NUMBER: type = "number";break;
+        case L_BOOLEAN: type = "boolean"; break;
+        case L_STRING: type = "string";break;
+        default: fprintf(stderr, "UNKNOWN TYPE IN DECLARATION\n");exit(1);
+    }
+
+    printf(" [%s %s]\n", type, ast->value.stmt_init.key);
+    ast_printf(ast->value.stmt_init.value, indent);
+}
+void ast_stmt_declare_printf(Ast ast, int indent)
+{
+    const char* type;
+
+    switch(ast->value.stmt_declare.type) {
+        case L_NUMBER: type = "number";break;
+        case L_BOOLEAN: type = "boolean"; break;
+        case L_STRING: type = "string";break;
+        default: fprintf(stderr, "UNKNOWN TYPE IN DECLARATION\n");exit(1);
+    }
+
+    printf(" [%s]\n", type);
+    ast_printf(ast->value.stmt_declare.idlist, indent);
 }
