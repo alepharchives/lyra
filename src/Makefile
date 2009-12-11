@@ -5,15 +5,18 @@ all: $(OBJECTS)
 	@echo "All done"
 
 CC=gcc
+AR=ar
 CFLAGS=-I../include
 
-../bin/lyraast: y.tab.c lex.yy.c ast.o util.o lyraast.o
+../bin/liblyra.a: y.tab.c lex.yy.c ast.o util.o symtab.o
 	@mkdir -p ../bin
-	$(CC) $(CFLAGS) -o $@ $+ -lgc
+	$(AR) -rcas $@ $+
 
-../bin/lyrac: y.tab.c lex.yy.c ast.o util.o lyrac.o
-	@mkdir -p ../bin
-	$(CC) $(CFLAGS) -o $@ $+ -lgc
+../bin/lyraast: ../bin/liblyra.a lyraast.o
+	$(CC) $(CFLAGS) -o $@ lyraast.o -lgc -llyra
+
+../bin/lyrac: ../bin/liblyra.a lyrac.o
+	$(CC) $(CFLAGS) -o $@ lyrac.o -lgc -llyra
 
 lex.yy.c: ../spec/lyra.l
 	flex $<
