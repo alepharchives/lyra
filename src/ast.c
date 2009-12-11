@@ -11,6 +11,8 @@ static void ast_identifier_printf(Ast);
 static void ast_string_printf(Ast);
 static void ast_number_printf(Ast);
 static void ast_boolean_printf(Ast);
+static void ast_lyratype_printf(Ast);
+static void ast_operator_printf(Ast);
 static void ast_binop_printf(Ast,int);
 static void ast_stmt_read_printf(Ast,int);
 static void ast_stmt_print_printf(Ast,int);
@@ -24,8 +26,10 @@ struct _Ast {
     union {
         char* identifier;
         char* string;
-        LyraBoolean boolean;
         int number;
+        int operator;
+        LyraBoolean boolean;
+        LyraType type;
 
         struct {
             Ast head;
@@ -38,7 +42,7 @@ struct _Ast {
         } explist;
 
         struct {
-            int operator;
+            Ast operator;
             Ast left;
             Ast right;
         } binop;
@@ -52,18 +56,18 @@ struct _Ast {
         } stmt_print;
 
         struct {
-            char* key;
+            Ast key;
             Ast value;
         } stmt_assign;
 
         struct {
-            LyraType type;
-            char* key;
+            Ast type;
+            Ast key;
             Ast value;
         } stmt_init;
 
         struct {
-            LyraType type;
+            Ast type;
             Ast idlist;
         } stmt_declare;
     } value;
@@ -101,17 +105,24 @@ Ast ast_number_new(int i)
     return ast;
 }
 
-Ast ast_idlist_new(const char* value, Ast next)
+Ast ast_lyratype_new(LyraType t)
 {
-    Ast ast = ast_identifier_new(value);
-    ast->next = next;
+    AST_NEW(TYPE, ast);
+    ast->value.type = t;
     return ast;
 }
 
-Ast ast_binaryop_new(int binop, Ast left, Ast right)
+Ast ast_operator_new(int op)
+{
+    AST_NEW(OPERATOR, ast);
+    ast->value.operator = op;
+    return ast;
+}
+
+Ast ast_binaryop_new(Ast operator, Ast left, Ast right)
 {
     AST_NEW(OP_BINARY, ast);
-    ast->value.binop.operator = binop;
+    ast->value.binop.operator = operator;
     ast->value.binop.left = left;
     ast->value.binop.right = right;
     return ast;
@@ -131,24 +142,24 @@ Ast ast_print_new(Ast explist)
     return ast;
 }
 
-Ast ast_assign_new(const char* key, Ast value)
+Ast ast_assign_new(Ast key, Ast value)
 {
     AST_NEW(STATEMENT_ASSIGN, ast);
-    ast->value.stmt_assign.key = strndup(key, 255);
+    ast->value.stmt_assign.key = key;
     ast->value.stmt_assign.value = value;
     return ast;
 }
 
-Ast ast_init_new(int type, const char* key, Ast value)
+Ast ast_init_new(Ast type, Ast key, Ast value)
 {
     AST_NEW(STATEMENT_INIT, ast);
     ast->value.stmt_init.type = type;
-    ast->value.stmt_init.key = strndup(key, 255);
+    ast->value.stmt_init.key = key;
     ast->value.stmt_init.value = value;
     return ast;
 }
 
-Ast ast_declare_new(int type, Ast idlist)
+Ast ast_declare_new(Ast type, Ast idlist)
 {
     AST_NEW(STATEMENT_DECLARE, ast);
     ast->value.stmt_declare.type = type;
@@ -194,6 +205,8 @@ void ast_type_printf(Ast ast)
         case STRING: printf("STRING ");break;
         case BOOLEAN: printf("BOOLEAN ");break;
         case NUMBER: printf("NUMBER ");break;
+        case TYPE: printf("TYPE ");break;
+        case OPERATOR: printf("OPERATOR ");break;
         case OP_BINARY: printf("OP_BINARY ");break;
         case STATEMENT_READ: printf("STMT_READ ");break;
         case STATEMENT_PRINT: printf("STMT_PRINT ");break;
@@ -211,6 +224,8 @@ void ast_value_printf(Ast ast, int indent)
         case STRING: ast_string_printf(ast);break;
         case NUMBER: ast_number_printf(ast);break;
         case BOOLEAN: ast_boolean_printf(ast);break;
+        case TYPE: ast_lyratype_printf(ast);break;
+        case OPERATOR: ast_operator_printf(ast);break;
         case OP_BINARY: ast_binop_printf(ast, indent);break;
         case STATEMENT_READ: ast_stmt_read_printf(ast, indent);break;
         case STATEMENT_PRINT: ast_stmt_print_printf(ast, indent);break;
@@ -245,9 +260,29 @@ void ast_boolean_printf(Ast ast)
     }
 }
 
+void ast_lyratype_printf(Ast ast)
+{
+    const char* type;
+
+    switch(ast->value.type) {
+        case L_NUMBER: type = "number";break;
+        case L_BOOLEAN: type = "boolean"; break;
+        case L_STRING: type = "string";break;
+        default: fprintf(stderr, "UNKNOWN TYPE IN DECLARATION\n");exit(1);
+    }
+
+    printf(" [%s]\n", type);
+}
+
+void ast_operator_printf(Ast ast)
+{
+    printf(" [%c]\n", ast->value.operator);
+}
+
 void ast_binop_printf(Ast ast, int indent)
 {
-    printf(" [%c]\n", ast->value.binop.operator);
+    printf("\n");
+    ast_printf(ast->value.binop.operator, indent);
     ast_printf(ast->value.binop.left, indent);
     ast_printf(ast->value.binop.right, indent);
 }
@@ -266,35 +301,21 @@ void ast_stmt_print_printf(Ast ast, int indent)
 
 void ast_stmt_assign_printf(Ast ast, int indent)
 {
-    printf(" [%s]\n", ast->value.stmt_assign.key);
+    printf("\n");
+    ast_printf(ast->value.stmt_assign.key, indent);
     ast_printf(ast->value.stmt_assign.value, indent);
 }
 
 void ast_stmt_init_printf(Ast ast, int indent)
 {
-    const char* type;
-
-    switch(ast->value.stmt_init.type) {
-        case L_NUMBER: type = "number";break;
-        case L_BOOLEAN: type = "boolean"; break;
-        case L_STRING: type = "string";break;
-        default: fprintf(stderr, "UNKNOWN TYPE IN DECLARATION\n");exit(1);
-    }
-
-    printf(" [%s %s]\n", type, ast->value.stmt_init.key);
+    printf("\n");
+    ast_printf(ast->value.stmt_init.type, indent);
+    ast_printf(ast->value.stmt_init.key, indent);
     ast_printf(ast->value.stmt_init.value, indent);
 }
 void ast_stmt_declare_printf(Ast ast, int indent)
 {
-    const char* type;
-
-    switch(ast->value.stmt_declare.type) {
-        case L_NUMBER: type = "number";break;
-        case L_BOOLEAN: type = "boolean"; break;
-        case L_STRING: type = "string";break;
-        default: fprintf(stderr, "UNKNOWN TYPE IN DECLARATION\n");exit(1);
-    }
-
-    printf(" [%s]\n", type);
+    printf("\n");
+    ast_printf(ast->value.stmt_declare.type, indent);
     ast_printf(ast->value.stmt_declare.idlist, indent);
 }

@@ -61,17 +61,21 @@ statement_type: declaration { $<ast>$ = $<ast>1; }
                 ;
 
 declaration: T_TYPE identifier_list {
-                 $<ast>$ = ast_declare_new($<type>1, $<ast>2);
+                 Ast type = ast_lyratype_new($<type>1);
+                 $<ast>$ = ast_declare_new(type, $<ast>2);
              }
              ;
 
 initialization: T_TYPE T_IDENTIFIER T_OP_ASSIGN expression {
-                 $<ast>$ = ast_init_new($<type>1, $<identifier>2, $<ast>4);
+                 Ast type = ast_lyratype_new($<type>1);
+                 Ast id = ast_identifier_new($<identifier>2);
+                 $<ast>$ = ast_init_new(type, id, $<ast>4);
              }
              ;
 
 assignment: T_IDENTIFIER T_OP_ASSIGN expression {
-                $<ast>$ = ast_assign_new($<identifier>1, $<ast>3);
+                Ast id = ast_identifier_new($<identifier>1);
+                $<ast>$ = ast_assign_new(id, $<ast>3);
             };
 
 console_out: T_KEY_PRINT expression_list {
@@ -91,16 +95,18 @@ expression_list: expression T_SEPARATOR expression_list {
                 ;
 
 expression: factor T_OP_BINARY expression {
-                $<ast>$ = ast_binaryop_new($<binop>2, $<ast>1, $<ast>3);
+                Ast operator = ast_operator_new($<binop>2);
+                $<ast>$ = ast_binaryop_new(operator, $<ast>1, $<ast>3);
             }
             | factor { $<ast>$ = $<ast>1; }
             ;
 
 identifier_list: T_IDENTIFIER T_SEPARATOR identifier_list {
-                     $<ast>$ = ast_idlist_new($<identifier>1, $<ast>3);
+                     Ast id = ast_identifier_new($<identifier>1);
+                     $<ast>$ = ast_next_set(id, $<ast>3);
                  }
                 | T_IDENTIFIER { 
-                    $<ast>$ = ast_idlist_new($<identifier>1, NULL); 
+                    $<ast>$ = ast_identifier_new($<identifier>1);
                 }
                 ;
 
