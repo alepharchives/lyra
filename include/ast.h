@@ -14,6 +14,16 @@ typedef struct _Ast* Ast;
 
 extern Ast rootAst;
 
+typedef enum {
+    L_NUMBER,
+    L_BOOLEAN,
+    L_STRING
+} LyraType;
+
+typedef enum {
+    L_FALSE,
+    L_TRUE
+} LyraBoolean;
 
 typedef enum {
     IDENTIFIER,

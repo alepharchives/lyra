@@ -4,12 +4,6 @@
 #include <stdio.h>
 #include <libgen.h>
 
-#define C_NUMBER 0
-#define C_BOOLEAN 1
-#define C_STRING 2
-#define C_TRUE 1
-#define C_FALSE 0
-
 #define CHECK_ARGCOUNT(argc, argv) if(argc != 2) { \
                             usage(basename(argv[0])); \
                             return -1; \
