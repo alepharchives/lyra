@@ -107,12 +107,6 @@ Ast ast_binaryop_new(int binop, Ast left, Ast right)
     return ast;
 }
 
-Ast ast_explist_new(Ast head, Ast tail)
-{
-    head->next = tail;
-    return head;
-}
-
 Ast ast_read_new(Ast idlist)
 {
     AST_NEW(STATEMENT_READ, ast);

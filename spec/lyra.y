@@ -83,10 +83,10 @@ console_in: T_KEY_READ identifier_list {
             };
 
 expression_list: expression T_SEPARATOR expression_list {
-                     $<ast>$ = ast_explist_new($<ast>1, $<ast>3);
+                     $<ast>$ = ast_next_set($<ast>1, $<ast>3);
                  }
                 | expression {
-                    $<ast>$ = ast_explist_new($<ast>1, NULL);
+                    $<ast>$ = $<ast>1;
                 }
                 ;
 
