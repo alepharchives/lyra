@@ -20,8 +20,8 @@
 
 %union {
     int number;
-    int boolean;
-    int type;
+    LyraBoolean boolean;
+    LyraType type;
     int binop;
     char* identifier;
     char* string;

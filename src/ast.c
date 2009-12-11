@@ -14,7 +14,7 @@ struct _Ast {
     union {
         char* identifier;
         char* string;
-        int boolean;
+        LyraBoolean boolean;
         int number;
 
         struct {
@@ -47,13 +47,13 @@ struct _Ast {
         } stmt_assign;
 
         struct {
-            int type;
+            LyraType type;
             char* key;
             Ast value;
         } stmt_init;
 
         struct {
-            int type;
+            LyraType type;
             Ast idlist;
         } stmt_declare;
     } value;
