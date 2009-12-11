@@ -75,7 +75,7 @@ assignment: T_IDENTIFIER T_OP_ASSIGN expression {
             };
 
 console_out: T_KEY_PRINT expression_list {
-                 $<ast>$ = ast_print_new($<ast>1);
+                 $<ast>$ = ast_print_new($<ast>2);
              };
 
 console_in: T_KEY_READ identifier_list { 
