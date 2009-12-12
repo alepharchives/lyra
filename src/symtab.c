@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <gc.h>
 #include <ast.h>
 #include <symtab.h>
@@ -14,16 +15,16 @@ struct _SymTab {
     } value;
 
     SymTab next;
-}
+};
 
 SymTab symtab_new()
 {
-    reutrn NULL;
+    return NULL;
 }
 
 SymTab symtab_define(SymTab tail, const char* name, LyraType type)
 {
-    SymTab st = GC_Malloc(sizeof(*st));
+    SymTab st = GC_malloc(sizeof(*st));
 
     if(st == NULL) {
         return NULL;
@@ -38,6 +39,18 @@ SymTab symtab_define(SymTab tail, const char* name, LyraType type)
 
 SymTab symtab_lookup(SymTab head, const char* name)
 {
+    SymTab current = head;
+
+    while(current != NULL) {
+        if(strncmp(current->name, name, 255) == 0) {
+            return current;
+        }
+
+        current = current->next;
+
+    }
+
+    return NULL;
 }
 
 SymTab symtab_string_set(SymTab st, const char* s)
