@@ -6,11 +6,11 @@ all: $(OBJECTS)
 
 CC=gcc
 AR=ar
-CFLAGS=-I../include
+CFLAGS=-I../include -L../bin
 
-../bin/liblyra.a: y.tab.c lex.yy.c ast.o util.o symtab.o
+../bin/liblyra.a: y.tab.o lex.yy.o ast.o util.o symtab.o
 	@mkdir -p ../bin
-	$(AR) -rcas $@ $+
+	$(AR) -rcs $@ $+
 
 ../bin/lyraast: ../bin/liblyra.a lyraast.o
 	$(CC) $(CFLAGS) -o $@ lyraast.o -lgc -llyra
@@ -23,7 +23,6 @@ lex.yy.c: ../spec/lyra.l
 
 y.tab.c: ../spec/lyra.y
 	yacc -d $<
-
 
 clean:
 	rm -f lex.yy.c
