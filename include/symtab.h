@@ -1,7 +1,7 @@
 #ifndef _SYMTAB_H
 #define _SYMTAB_H
 
-typedef _SymTab* SymTab;
+typedef struct _SymTab* SymTab;
 
 
 SymTab symtab_new();
