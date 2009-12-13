@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <lyra.h>
-#include <ast.h>
 
 
 int main(int argc, char** argv)

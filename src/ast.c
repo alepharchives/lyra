@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gc.h>
-#include <ast.h>
+#include <lyra.h>
 
 #define AST_NEW(EnumType, a) Ast a = GC_malloc(sizeof(*a)); \
                                  if(a == NULL) { \

@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gc.h>
-#include <ast.h>
-#include <symtab.h>
+#include <lyra.h>
 
 SymTab symbolTable;
 

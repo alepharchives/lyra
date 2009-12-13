@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gc.h>
-#include <ast.h>
-#include <symtab.h>
-#include <semantic.h>
+#include <lyra.h>
 
 
 static int op_binary_chk(Ast);

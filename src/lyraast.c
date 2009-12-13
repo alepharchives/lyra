@@ -1,8 +1,5 @@
 #include <stdlib.h>
 #include <lyra.h>
-#include <ast.h>
-#include <symtab.h>
-#include <semantic.h>
 
 int main(int argc, char** argv)
 {
