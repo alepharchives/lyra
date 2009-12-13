@@ -10,7 +10,7 @@
                                  } \
                                  a->type = EnumType; \
                                  a->next = NULL; \
-                                 a->lineno = 0; \
+                                 a->lineno = LINENUM; \
                                  if(1) \
 
 

@@ -5,7 +5,7 @@
     #include <ast.h>
     #include "../src/y.tab.h"
 
-    int LINENUM;
+    int LINENUM = 1;
 %}
 %%
 ;                        return T_TERMINATOR;
