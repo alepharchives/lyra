@@ -82,7 +82,7 @@ struct _Ast {
         } stmt_declare;
     } value;
 
-    int lineno;
+    int line;
     Ast next;
 };
 
