@@ -8,7 +8,7 @@
 
     void yyerror(const char *str)
     {
-        fprintf(stderr, "%s on line %d\n", str, LINENUM);
+        fprintf(stderr, "%s at column %d, line %d\n", str, COLPOS, LINENUM);
     }
 
     int yywrap()
