@@ -4,8 +4,8 @@
 typedef struct _Ast* Ast;
 
 extern Ast rootAst;
-extern int LINENUM;
-extern int COLPOS;
+extern int CURRENT_LINE;
+extern int CURRENT_COLUMN;
 
 typedef enum {
     L_NUMBER,
