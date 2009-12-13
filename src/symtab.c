@@ -4,6 +4,8 @@
 #include <ast.h>
 #include <symtab.h>
 
+SymTab symbolTable;
+
 struct _SymTab {
     char* name;
     LyraType type;
@@ -31,6 +33,9 @@ SymTab symtab_define(SymTab tail, const char* name, LyraType type)
     }
 
     st->name = strndup(name, 255); /* TODO: use GC_Malloc, with memncpy, to implement strndup */
+    st->value.string = "";
+    st->value.number = 0;
+    st->value.boolean = L_FALSE;
     st->type = type;
     st->next = tail;
 
@@ -51,6 +56,11 @@ SymTab symtab_lookup(SymTab head, const char* name)
     }
 
     return NULL;
+}
+
+LyraType symtab_type_get(SymTab st)
+{
+    return st->type;
 }
 
 SymTab symtab_string_set(SymTab st, const char* s)

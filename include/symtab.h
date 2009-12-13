@@ -3,11 +3,14 @@
 
 typedef struct _SymTab* SymTab;
 
+extern SymTab symbolTable;
 
 SymTab symtab_new();
 
 SymTab symtab_define(SymTab, const char*, LyraType);
 SymTab symtab_lookup(SymTab, const char*);
+
+LyraType symtab_type_get(SymTab);
 
 SymTab symtab_string_set(SymTab, const char*);
 SymTab symtab_number_set(SymTab, int);
