@@ -11,5 +11,6 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    typechk(rootAst, symtab_new());
     ast_printf(rootAst, 0);
 }
