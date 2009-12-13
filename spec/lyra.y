@@ -8,7 +8,7 @@
 
     void yyerror(const char *str)
     {
-        fprintf(stderr, "error: %s\n", str);
+        fprintf(stderr, "%s on line %d\n", str, LINENUM);
     }
 
     int yywrap()
@@ -17,6 +17,8 @@
     }
 
 %}
+
+%error-verbose
 
 %union {
     int number;
