@@ -24,8 +24,8 @@ int semantic_chk(Ast ast)
 
     switch(ast->type) {
         /*case STATEMENT_READ: return stmt_read_chk(ast);
-        case STATEMENT_PRINT: return stmt_print_chk(ast);
-        case STATEMENT_ASSIGN: return stmt_assign_chk(ast);*/
+        case STATEMENT_PRINT: return stmt_print_chk(ast);*/
+        case STATEMENT_ASSIGN: status = stmt_assign_chk(ast);break;
         case STATEMENT_INIT: status = stmt_init_chk(ast);break;
         case STATEMENT_DECLARE: status = stmt_declare_chk(ast);break;
         default: fprintf(stderr, "Line %d: UNKNOWN AST STATEMENT TYPE: %d\n", ast->line, ast->type);return 0;
@@ -38,16 +38,52 @@ int semantic_chk(Ast ast)
     return semantic_chk(ast->next);
 }
 
+/*
+   Assignment Statement Rules:
+   - Ensure the variable is already declared
+   - Retrieve the declared type of the variable
+   - Typecheck the RHS
+   - Get the type of the RHS
+   - Ensure the LHS and RHS types are the same
+*/
+int stmt_assign_chk(Ast ast)
+{
+    Ast nameAst = ast->value.stmt_assign.key;
+    const char* name = nameAst->value.identifier;
+
+    SymTab st = symtab_lookup(symbolTable, name);
+    if(st == NULL) {
+        fprintf(stderr, "Line %d: variable '%s' has not been declared\n", nameAst->line, name);
+        return L_INVALID;
+    }
+
+    LyraType type = symtab_type_get(st);
+
+    Ast valueAst = ast->value.stmt_assign.value;
+    LyraType valueType = semantic_type_get(valueAst);
+
+    if(type != valueType) {
+        fprintf(stderr, "Line %d: variable '%s' has different type from RHS expression\n", nameAst->line, name);
+        return L_INVALID;
+    }
+
+    return type;
+}
+
+/* 
+   Init Statement Rules:
+   - Check that variable is not being redeclared
+   - Declare the variable if its not already declared
+   - typecheck the expression value on the RHS
+   - Check that the expression and the declration types
+     are the same
+ */
 int stmt_init_chk(Ast ast)
 {
-    Ast typeAst = ast->value.stmt_init.type;
-    LyraType type = typeAst->value.type;
 
     Ast nameAst = ast->value.stmt_init.key;
     const char* name = nameAst->value.identifier;
 
-    Ast valueAst = ast->value.stmt_init.value;
-    LyraType valueType = semantic_type_get(valueAst);
 
     if(symtab_lookup(symbolTable, name) != NULL) {
         /* 
@@ -58,6 +94,11 @@ int stmt_init_chk(Ast ast)
         return 0;
     }
 
+    Ast typeAst = ast->value.stmt_init.type;
+    LyraType type = typeAst->value.type;
+
+    Ast valueAst = ast->value.stmt_init.value;
+    LyraType valueType = semantic_type_get(valueAst);
 
     if(type != valueType) {
         fprintf(stderr, "Line %d: variable %s has declaration and initialization of different types\n", nameAst->line, name);
@@ -76,6 +117,12 @@ int stmt_init_chk(Ast ast)
     return 1;
 }
 
+/*
+   Declaration Statement Rules
+   - Check that variable is not being redeclared
+   - Declare the variable if its not already declared
+   - Do this iteratively for the entire IDLIST
+*/
 int stmt_declare_chk(Ast ast)
 {
     LyraType type = ast->value.stmt_declare.type->value.type;
@@ -114,6 +161,11 @@ LyraType semantic_type_get(Ast ast)
     }
 }
 
+/*
+    Identifier Rules
+    - Return previously declared type for identifier
+      or return L_INVALID
+*/
 LyraType semantic_type_identifer_get(Ast ast)
 {
     SymTab st = symtab_lookup(symbolTable, ast->value.identifier);
@@ -126,6 +178,14 @@ LyraType semantic_type_identifer_get(Ast ast)
     return symtab_type_get(st);
 }
 
+/*
+   Binary Operation Rules
+   - Recursively perform checkon LHS and RHS and get their types
+   - Ensure the LHS and RHS have the same type
+   - Ensure the LHS/RHS type is the proper type for the
+     operator
+   - Return the LHS/RHS type or L_INVALID
+*/
 LyraType semantic_type_binop_get(Ast ast)
 {
     Ast opAst = ast->value.binop.operator;
