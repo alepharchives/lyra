@@ -3,11 +3,8 @@
 
 typedef struct _Ast* Ast;
 
-extern Ast rootAst;
-extern int CURRENT_LINE;
-extern int CURRENT_COLUMN;
-
 typedef enum {
+    L_INVALID,
     L_NUMBER,
     L_BOOLEAN,
     L_STRING
@@ -33,6 +30,67 @@ typedef enum {
     STATEMENT_DECLARE
 } AstType;
 
+struct _Ast {
+    AstType type;
+
+    union {
+        char* identifier;
+        char* string;
+        int number;
+        int operator;
+        LyraBoolean boolean;
+        LyraType type;
+
+        struct {
+            Ast head;
+            Ast tail;
+        } idlist;
+
+        struct {
+            Ast head;
+            Ast tail;
+        } explist;
+
+        struct {
+            Ast operator;
+            Ast left;
+            Ast right;
+        } binop;
+
+        struct {
+            Ast idlist;
+        } stmt_read;
+
+        struct {
+            Ast explist;
+        } stmt_print;
+
+        struct {
+            Ast key;
+            Ast value;
+        } stmt_assign;
+
+        struct {
+            Ast type;
+            Ast key;
+            Ast value;
+        } stmt_init;
+
+        struct {
+            Ast type;
+            Ast idlist;
+        } stmt_declare;
+    } value;
+
+    int line;
+    Ast next;
+};
+
+
+
+extern Ast rootAst;
+extern int CURRENT_LINE;
+extern int CURRENT_COLUMN;
 
 Ast ast_identifier_new(const char*);
 Ast ast_string_new(const char*);

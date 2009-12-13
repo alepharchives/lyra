@@ -30,61 +30,6 @@ static void ast_stmt_assign_printf(Ast,int);
 static void ast_stmt_init_printf(Ast,int);
 static void ast_stmt_declare_printf(Ast,int);
 
-struct _Ast {
-    AstType type;
-
-    union {
-        char* identifier;
-        char* string;
-        int number;
-        int operator;
-        LyraBoolean boolean;
-        LyraType type;
-
-        struct {
-            Ast head;
-            Ast tail;
-        } idlist;
-
-        struct {
-            Ast head;
-            Ast tail;
-        } explist;
-
-        struct {
-            Ast operator;
-            Ast left;
-            Ast right;
-        } binop;
-
-        struct {
-            Ast idlist;
-        } stmt_read;
-
-        struct {
-            Ast explist;
-        } stmt_print;
-
-        struct {
-            Ast key;
-            Ast value;
-        } stmt_assign;
-
-        struct {
-            Ast type;
-            Ast key;
-            Ast value;
-        } stmt_init;
-
-        struct {
-            Ast type;
-            Ast idlist;
-        } stmt_declare;
-    } value;
-
-    int line;
-    Ast next;
-};
 
 
 Ast ast_identifier_new(const char* s)
