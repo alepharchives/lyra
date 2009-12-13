@@ -23,8 +23,8 @@ int semantic_chk(Ast ast)
     int status = 0;
 
     switch(ast->type) {
-        /*case STATEMENT_READ: return stmt_read_chk(ast);
-        case STATEMENT_PRINT: return stmt_print_chk(ast);*/
+        case STATEMENT_READ: status = stmt_read_chk(ast); break;
+        case STATEMENT_PRINT: status = stmt_print_chk(ast); break;
         case STATEMENT_ASSIGN: status = stmt_assign_chk(ast);break;
         case STATEMENT_INIT: status = stmt_init_chk(ast);break;
         case STATEMENT_DECLARE: status = stmt_declare_chk(ast);break;
@@ -36,6 +36,48 @@ int semantic_chk(Ast ast)
     }
 
     return semantic_chk(ast->next);
+}
+
+int stmt_read_chk(Ast ast)
+{
+    Ast current = ast->value.stmt_read.idlist;
+
+    LyraType type = L_INVALID;
+
+    while(current != NULL) {
+        type = semantic_type_get(current);
+
+        if(type == L_INVALID) {
+            return 0;
+        }
+
+        current = current->next;
+    }
+
+    return 1;
+}
+
+/*
+   Print Statement Rules:
+   - Check the type of each expression on the explist
+*/
+int stmt_print_chk(Ast ast)
+{
+    Ast current = ast->value.stmt_print.explist;
+
+    LyraType type = L_INVALID;
+
+    while(current != NULL) {
+        type = semantic_type_get(current);
+
+        if(type == L_INVALID) {
+            return 0;
+        }
+
+        current = current->next;
+    }
+
+    return 1;
 }
 
 /*
@@ -157,7 +199,7 @@ LyraType semantic_type_get(Ast ast)
         case BOOLEAN: return L_BOOLEAN;
         case NUMBER: return L_NUMBER;
         case OP_BINARY: return semantic_type_binop_get(ast);
-        default: fprintf(stderr, "Line %d: Invalid Expression Type\n", ast->line); return L_INVALID;
+        default: fprintf(stderr, "Line %d: Invalid Expression Type: %d\n", ast->line, ast->type); return L_INVALID;
     }
 }
 
