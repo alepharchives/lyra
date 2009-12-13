@@ -5,7 +5,11 @@
     #include <ast.h>
     #include "../src/y.tab.h"
 
+    #define COLPOS_INC() COLPOS += strnlen(yytext, 255)
+    #define NEWLINE() LINENUM += 1; COLPOS = 0
+
     int LINENUM = 1;
+    int COLPOS = 0;
 %}
 %%
 ;                        return T_TERMINATOR;

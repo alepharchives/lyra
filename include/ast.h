@@ -5,6 +5,7 @@ typedef struct _Ast* Ast;
 
 extern Ast rootAst;
 extern int LINENUM;
+extern int COLPOS;
 
 typedef enum {
     L_NUMBER,
