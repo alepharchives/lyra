@@ -28,4 +28,3 @@ clean:
 	rm -f lex.yy.c
 	rm -f y.tab.*
 	rm -f *.o
-	rm -rf bin
