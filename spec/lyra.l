@@ -4,6 +4,8 @@
     #include <string.h>
     #include <ast.h>
     #include "../src/y.tab.h"
+
+    int LINENUM;
 %}
 %%
 ;                        return T_TERMINATOR;
@@ -20,6 +22,7 @@ false                    yylval.boolean=L_FALSE;return T_BOOLEAN;
 [a-zA-Z_][a-zA-Z_0-9]*   yylval.identifier=strdup(yytext);return T_IDENTIFIER;
 \"([^\"]|\\\")*\"                   yylval.string=strdup(yytext);return T_STRING;
 [0-9]+                   yylval.number=atoi(yytext);return T_NUMBER;
-[ \t\n]                  ;
+\n                       LINENUM++;
+[ \t]                    ;
 .                        return yytext[0];
 %%
