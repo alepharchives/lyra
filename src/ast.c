@@ -4,6 +4,16 @@
 #include <gc.h>
 #include <ast.h>
 
+#define AST_NEW(EnumType, a) Ast a = GC_malloc(sizeof(*a)); \
+                                 if(a == NULL) { \
+                                     return NULL; \
+                                 } \
+                                 a->type = EnumType; \
+                                 a->next = NULL; \
+                                 a->lineno = 0; \
+                                 if(1) \
+
+
 static void ast_indent(int);
 static void ast_type_printf(Ast);
 static void ast_value_printf(Ast,int);

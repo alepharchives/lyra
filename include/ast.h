@@ -1,15 +1,6 @@
 #ifndef _AST_H
 #define _AST_H
 
-#define AST_NEW(EnumType, a) Ast a = GC_malloc(sizeof(*a)); \
-                                 if(a == NULL) { \
-                                     return NULL; \
-                                 } \
-                                 a->type = EnumType; \
-                                 a->next = NULL; \
-                                 a->lineno = 0; \
-                                 if(1) \
-
 typedef struct _Ast* Ast;
 
 extern Ast rootAst;
