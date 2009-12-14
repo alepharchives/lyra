@@ -16,6 +16,17 @@
                             stdin = fopen(fname, "r"); \
                             if(1) \
 
+#define TRY_PARSE() if (yyparse() != 0) { \
+                        return -1; \
+                    } \
+                    if(1) \
+
+#define TRY_TYPECHECK() symbolTable = symtab_new(); \
+                      if(!semantic_chk(rootAst)) { \
+                          return -1; \
+                      } \
+                      if(1) \
+
 void usage();
 int check_fname(const char*);
 char* get_fname_from(const char*, const char*);
