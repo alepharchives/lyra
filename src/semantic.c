@@ -132,7 +132,7 @@ int stmt_init_chk(Ast ast)
             TODO: More info with semantic error from existing 
             definition, also line number reference will be good 
          */
-        fprintf(stderr, "Line %d: variable %s is already declared\n", nameAst->line, name);
+        fprintf(stderr, "Line %d: variable '%s' is already declared\n", nameAst->line, name);
         return 0;
     }
 
@@ -143,7 +143,7 @@ int stmt_init_chk(Ast ast)
     LyraType valueType = semantic_type_get(valueAst);
 
     if(type != valueType) {
-        fprintf(stderr, "Line %d: variable %s has declaration and initialization of different types\n", nameAst->line, name);
+        fprintf(stderr, "Line %d: variable '%s' has declaration and initialization of different types\n", nameAst->line, name);
         return 0;
     }
 
@@ -213,7 +213,7 @@ LyraType semantic_type_identifer_get(Ast ast)
     SymTab st = symtab_lookup(symbolTable, ast->value.identifier);
 
     if(st == NULL) {
-        fprintf(stderr, "Line %d: %s can not be used before it is declared\n", ast->line, ast->value.identifier);
+        fprintf(stderr, "Line %d: variable '%s' can not be used before it is declared\n", ast->line, ast->value.identifier);
         return L_INVALID;
     }
 
@@ -238,7 +238,7 @@ LyraType semantic_type_binop_get(Ast ast)
     LyraType rightType = semantic_type_get(rightAst);
 
     if(leftType != rightType) {
-        fprintf(stderr, "Line %d: LHS and RHS of operator %c are not of same type\n", opAst->line, opAst->value.operator);
+        fprintf(stderr, "Line %d: LHS and RHS of operator '%c' are not of same type\n", opAst->line, opAst->value.operator);
         return L_INVALID;
     }
 
@@ -248,13 +248,13 @@ LyraType semantic_type_binop_get(Ast ast)
             || operator == '*' || operator == '/'
             || operator == '%') {
         if(leftType != L_NUMBER) { 
-            fprintf(stderr, "Line %d: '%c' can only be used on NUMBERs\n", opAst->line, operator); 
+            fprintf(stderr, "Line %d: operator '%c' can only be used on NUMBERs\n", opAst->line, operator); 
             return L_INVALID;
         }
     }
 
     if(operator == '~' && leftType != L_STRING) {
-        fprintf(stderr, "Line %d: '%c' can only be used on STRINGs\n", opAst->line, operator); 
+        fprintf(stderr, "Line %d: operator '%c' can only be used on STRINGs\n", opAst->line, operator); 
         return L_INVALID;
     }
 
