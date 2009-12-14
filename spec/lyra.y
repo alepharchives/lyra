@@ -85,7 +85,7 @@ console_out: T_KEY_PRINT expression_list {
              };
 
 console_in: T_KEY_READ identifier_list { 
-                $<ast>$ = ast_read_new($<ast>1); 
+                $<ast>$ = ast_read_new($<ast>2); 
             };
 
 expression_list: expression T_SEPARATOR expression_list {
