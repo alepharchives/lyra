@@ -11,5 +11,13 @@ int main(int argc, char** argv)
 
     TRY_TYPECHECK();
 
+    symbolTable = symtab_new();
+    iCode = icode_new();
+
+    if(!inter_translate_program(rootAst)) {
+        return -1;
+    }
+
+    icode_printf(iCode, 1);
     return 1;
 }
