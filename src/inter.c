@@ -28,10 +28,10 @@ int inter_translate_program(Ast ast)
     while(current != NULL) {
 
         switch(current->type) {
-    /*        case STATEMENT_READ: inter_trans_stmt_read(ast);break;
-            case STATEMENT_PRINT: inter_trans_stmt_print(ast);break;*/
+    /*        case STATEMENT_READ: inter_trans_stmt_read(current);break;
+            case STATEMENT_PRINT: inter_trans_stmt_print(current);break;*/
             case STATEMENT_ASSIGN: status = inter_trans_stmt_assign(current);break;
-/*            case STATEMENT_INIT: inter_trans_stmt_init(ast);break;*/
+            case STATEMENT_INIT: status = inter_trans_stmt_init(current);break;
             case STATEMENT_DECLARE: status = inter_trans_stmt_declare(current);break;
             default: fprintf(stderr, "Unknown Lyra Statement Type\n");return 0;
         }
@@ -60,6 +60,20 @@ static int inter_trans_stmt_assign(Ast ast)
     return 1;
 }
 
+static int inter_trans_stmt_init(Ast ast)
+{
+    const char* name = ast->value.stmt_init.key->value.identifier;
+    const char* place = newvar();
+    symbolTable = symtab_define(symbolTable, name, L_STRING);
+    symbolTable = symtab_string_set(symbolTable, place);
+
+    ICode rhs = inter_trans_exp(ast->value.stmt_init.value, place);
+    iCode = icode_append(iCode, rhs);
+
+    return 1;
+
+}
+
 static int inter_trans_stmt_declare(Ast ast)
 {
     /*what to do about types?*/
@@ -75,6 +89,7 @@ static int inter_trans_stmt_declare(Ast ast)
 
     return 1;
 }
+
 
 static ICode inter_trans_exp(Ast ast, const char* place)
 {
