@@ -68,14 +68,29 @@ SymTab symtab_string_set(SymTab st, const char* s)
     return st;
 }
 
+char* symtab_string_get(SymTab st)
+{
+    return st->value.string;
+}
+
 SymTab symtab_number_set(SymTab st, int n)
 {
     st->value.number = n;
     return st;
 }
 
+int symtab_number_get(SymTab st)
+{
+    return st->value.number;
+}
+
 SymTab symtab_boolean_set(SymTab st, LyraBoolean b)
 {
     st->value.boolean = b;
     return st;
+}
+
+LyraBoolean symtab_boolean_get(SymTab st)
+{
+    return st->value.boolean;
 }

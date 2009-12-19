@@ -16,4 +16,8 @@ SymTab symtab_string_set(SymTab, const char*);
 SymTab symtab_number_set(SymTab, int);
 SymTab symtab_boolean_set(SymTab, LyraBoolean);
 
+char* symtab_string_get(SymTab);
+int symtab_number_get(SymTab);
+LyraBoolean symtab_boolean_get(SymTab);
+
 #endif
