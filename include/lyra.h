@@ -8,6 +8,7 @@
 #include "ast.h"
 #include "symtab.h"
 #include "semantic.h"
-
+#include "icode.h"
+#include "inter.h"
 
 #endif
