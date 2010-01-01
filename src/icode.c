@@ -111,6 +111,12 @@ void icode_printf(ICode ic, int i)
     }
 
     printf("%d: ", i);
+    switch(ic->ltype) {
+        case L_NUMBER: printf("NUMBER ");break;
+        case L_STRING: printf("STRING ");break;
+        case L_BOOLEAN: printf("BOOLEAN ");break;
+        default: printf("LINVALID ");
+    }
 
     switch(ic->type) {
         case I_ASSIGN_STRING: printf("%s = %s\n", ic->name, ic->value.string);break;
