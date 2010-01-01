@@ -1,0 +1,15 @@
+number a, b, c;
+
+stdout "1: > ";
+stdin a;
+
+stdout "2: > ";
+stdin b;
+
+stdout "3: > ";
+stdin c;
+
+number sum = a + b + c;
+number avg = sum / 3;
+
+stdout "The average of ", a, b, c, " = ", avg;
