@@ -109,6 +109,11 @@ ICode icode_binop_set(ICode ic, int op, const char* left, const char* right)
     return ic;
 }
 
+LyraType icode_ltype_get(ICode ic)
+{
+    return ic->ltype;
+}
+
 void icode_printf(ICode ic, int i)
 {
     if(ic == NULL) {

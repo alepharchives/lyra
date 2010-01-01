@@ -38,6 +38,8 @@ ICode icode_boolean_set(ICode, LyraBoolean);
 ICode icode_identifier_set(ICode, const char*);
 ICode icode_binop_set(ICode, int, const char*, const char*);
 
+LyraType icode_ltype_get(ICode);
+
 void icode_printf(ICode, int);
 
 #endif
