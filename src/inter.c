@@ -55,8 +55,54 @@ static int inter_trans_stmt_read(Ast ast)
     return 1;
 }
 
+/*
+   An expression like 
+
+   stdout 5+5;
+
+   or
+
+   stdout "abcde";
+
+   will be converted to the following ICode fragments
+
+   num v0 = 5;
+   num v1 = 5;
+   num v2 = v0 + v1;
+   PRINT num v2;
+
+   and
+
+   str v0 = "abcde";
+   PRINT str v0
+*/
+
 static int inter_trans_stmt_print(Ast ast)
 {
+    Ast current = ast->value.stmt_print.explist;
+
+    while(current != NULL) {
+        /* First build an expression ICode for the current
+           expression, hence getting its type,
+           */
+        const char* ivar = newvar();
+
+        ICode exp = inter_trans_exp(current, ivar);
+        iCode = icode_append(iCode, exp);
+
+        LyraType ltype = icode_ltype_get(exp);
+
+        /* Then build a print ICode with the name
+           and type of the just built expression
+           ICode */
+
+        ICode print = icode_print_new(ltype);
+        print = icode_name_set(print, ivar);
+        iCode = icode_append(iCode, print);
+
+        current = current->next;
+    }
+
     return 1;
 }
 
