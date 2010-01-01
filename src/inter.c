@@ -63,10 +63,19 @@ static int inter_trans_stmt_assign(Ast ast)
 static int inter_trans_stmt_init(Ast ast)
 {
     const char* var = ast->value.stmt_init.key->value.identifier;
+    LyraType ltype = ast->value.stmt_init.type->value.type;
+
     const char* ivar = newvar();
 
+    /* first name 'var' to 'ivar' in symbol table
+       for use in the translation */
     symbolTable = symtab_define(symbolTable, var, L_STRING);
     symbolTable = symtab_string_set(symbolTable, ivar);
+
+    /* then add a declaration for 'ivar' in symbol table
+       so we can grab type information later in the 
+       translation process */
+    symbolTable = symtab_define(symbolTable, ivar, ltype);
 
     ICode rhs = inter_trans_exp(ast->value.stmt_init.value, ivar);
     iCode = icode_append(iCode, rhs);
@@ -77,13 +86,14 @@ static int inter_trans_stmt_init(Ast ast)
 
 static int inter_trans_stmt_declare(Ast ast)
 {
-    /*what to do about types?*/
     Ast current = ast->value.stmt_declare.idlist;
+    LyraType ltype = ast->value.stmt_declare.type->value.type;
 
     while(current != NULL) {
         const char* ivar = newvar();
         symbolTable = symtab_define(symbolTable, current->value.identifier, L_STRING);
         symbolTable = symtab_string_set(symbolTable, ivar);
+        symbolTable = symtab_define(symbolTable, ivar, ltype);
 
         current = current->next;
     }
