@@ -98,10 +98,10 @@ static int inter_trans_stmt_read(Ast ast)
 
    will be converted to the following ICode fragments
 
-   num v0 = 5;
+   num v2 = 5;
    num v1 = 5;
-   num v2 = v0 + v1;
-   PRINT num v2;
+   num v0 = v1 + v2;
+   PRINT num v0;
 
    and
 
