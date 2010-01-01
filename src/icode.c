@@ -44,6 +44,12 @@ ICode icode_print_new(LyraType ltype)
     return ic;
 }
 
+ICode icode_read_new(LyraType ltype)
+{
+    ICODE_NEW(ic, I_READ, ltype);
+    return ic;
+}
+
 ICode icode_append(ICode head, ICode new)
 {
     if(head == NULL) {
