@@ -32,9 +32,9 @@ ICode icode_new()
     return NULL;
 }
 
-ICode icode_assign_new(ICodeType type)
+ICode icode_assign_new(ICodeType type, LyraType ltype)
 {
-    ICODE_NEW(ic, type);
+    ICODE_NEW(ic, type, ltype);
     return ic;
 }
 
