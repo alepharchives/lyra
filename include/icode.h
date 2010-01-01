@@ -4,11 +4,12 @@
 #include <gc.h>
 #include <ast.h>
 
-#define  ICODE_NEW(ic, type) ICode ic = GC_malloc(sizeof(*ic)); \
+#define  ICODE_NEW(ic, type, ltype) ICode ic = GC_malloc(sizeof(*ic)); \
                              if(ic == NULL) { \
                                  return NULL; \
                              } \
                              ic->type = type; \
+                             ic->ltype = ltype; \
                              ic->tail = NULL; \
                              ic->next = NULL; \
 
@@ -26,7 +27,7 @@ typedef enum {
 
 
 ICode icode_new();
-ICode icode_assign_new(ICodeType);
+ICode icode_assign_new(ICodeType, LyraType);
 ICode icode_append(ICode,ICode);
 ICode icode_name_set(ICode, const char *);
 ICode icode_number_set(ICode, int);

@@ -7,6 +7,7 @@ ICode iCode;
 
 struct _ICode {
     ICodeType type;
+    LyraType ltype;
     char* name;
     union {
         char* identifier;
