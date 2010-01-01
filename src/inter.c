@@ -5,6 +5,8 @@
 
 static int varIndex = 0;
 
+static int inter_trans_stmt_read(Ast);
+static int inter_trans_stmt_print(Ast);
 static int inter_trans_stmt_assign(Ast);
 static int inter_trans_stmt_init(Ast);
 static int inter_trans_stmt_declare(Ast);
@@ -29,8 +31,8 @@ int inter_translate_program(Ast ast)
     while(current != NULL) {
 
         switch(current->type) {
-    /*        case STATEMENT_READ: inter_trans_stmt_read(current);break;
-            case STATEMENT_PRINT: inter_trans_stmt_print(current);break;*/
+            case STATEMENT_READ: status = inter_trans_stmt_read(current);break;
+            case STATEMENT_PRINT: status = inter_trans_stmt_print(current);break;
             case STATEMENT_ASSIGN: status = inter_trans_stmt_assign(current);break;
             case STATEMENT_INIT: status = inter_trans_stmt_init(current);break;
             case STATEMENT_DECLARE: status = inter_trans_stmt_declare(current);break;
@@ -47,6 +49,16 @@ int inter_translate_program(Ast ast)
     return 1;
 }
 
+
+static int inter_trans_stmt_read(Ast ast)
+{
+    return 1;
+}
+
+static int inter_trans_stmt_print(Ast ast)
+{
+    return 1;
+}
 
 static int inter_trans_stmt_assign(Ast ast)
 {
