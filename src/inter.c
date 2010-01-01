@@ -50,8 +50,40 @@ int inter_translate_program(Ast ast)
 }
 
 
+/*
+   A program like
+
+   number a, b, c;
+
+   stdin a, b, c;
+
+   Will be translated into
+
+   READ number v0
+   READ number v1
+   READ number v2
+
+*/
 static int inter_trans_stmt_read(Ast ast)
 {
+    Ast current = ast->value.stmt_read.idlist;
+
+    while(current != NULL) {
+        const char* var = current->value.identifier;
+        SymTab st = symtab_lookup(symbolTable, var);
+        const char* ivar = symtab_string_get(st);
+
+        SymTab st1 = symtab_lookup(symbolTable, ivar);
+        LyraType ltype = symtab_type_get(st1);
+
+        ICode ic = icode_read_new(ltype);
+        ic = icode_name_set(ic, ivar);
+
+        iCode = icode_append(iCode, ic);
+
+        current = current->next;
+    }
+
     return 1;
 }
 
