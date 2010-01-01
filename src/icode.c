@@ -138,6 +138,7 @@ void icode_printf(ICode ic, int i)
                                      ic->value.binop.left,
                                      ic->value.binop.op,
                                      ic->value.binop.right);break;
+        case I_PRINT: printf("PRINT %s\n", ic->name);break;
         default: fprintf(stderr, "Unknown Intermediate Code type\n");return;
     }
 
