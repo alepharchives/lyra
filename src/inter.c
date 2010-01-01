@@ -51,9 +51,9 @@ static int inter_trans_stmt_assign(Ast ast)
 {
     const char* name = ast->value.stmt_assign.key->value.identifier;
     SymTab st = symtab_lookup(symbolTable, name);
-    const char* place = symtab_string_get(st);
+    const char* ivar = symtab_string_get(st);
 
-    ICode rhs = inter_trans_exp(ast->value.stmt_assign.value, place);
+    ICode rhs = inter_trans_exp(ast->value.stmt_assign.value, ivar);
 
     iCode = icode_append(iCode, rhs);
 
@@ -63,11 +63,11 @@ static int inter_trans_stmt_assign(Ast ast)
 static int inter_trans_stmt_init(Ast ast)
 {
     const char* name = ast->value.stmt_init.key->value.identifier;
-    const char* place = newvar();
+    const char* ivar = newvar();
     symbolTable = symtab_define(symbolTable, name, L_STRING);
-    symbolTable = symtab_string_set(symbolTable, place);
+    symbolTable = symtab_string_set(symbolTable, ivar);
 
-    ICode rhs = inter_trans_exp(ast->value.stmt_init.value, place);
+    ICode rhs = inter_trans_exp(ast->value.stmt_init.value, ivar);
     iCode = icode_append(iCode, rhs);
 
     return 1;
@@ -80,9 +80,9 @@ static int inter_trans_stmt_declare(Ast ast)
     Ast current = ast->value.stmt_declare.idlist;
 
     while(current != NULL) {
-        const char* place = newvar();
+        const char* ivar = newvar();
         symbolTable = symtab_define(symbolTable, current->value.identifier, L_STRING);
-        symbolTable = symtab_string_set(symbolTable, place);
+        symbolTable = symtab_string_set(symbolTable, ivar);
 
         current = current->next;
     }
@@ -91,46 +91,46 @@ static int inter_trans_stmt_declare(Ast ast)
 }
 
 
-static ICode inter_trans_exp(Ast ast, const char* place)
+static ICode inter_trans_exp(Ast ast, const char* ivar)
 {
     switch(ast->type) {
-        case NUMBER: return inter_trans_number(ast, place);
-        case STRING: return inter_trans_string(ast, place);
-        case BOOLEAN: return inter_trans_boolean(ast, place);
-        case IDENTIFIER: return inter_trans_identifier(ast, place);
-        case OP_BINARY: return inter_trans_binop(ast, place);
+        case NUMBER: return inter_trans_number(ast, ivar);
+        case STRING: return inter_trans_string(ast, ivar);
+        case BOOLEAN: return inter_trans_boolean(ast, ivar);
+        case IDENTIFIER: return inter_trans_identifier(ast, ivar);
+        case OP_BINARY: return inter_trans_binop(ast, ivar);
         default: fprintf(stderr, "Unknown Lyra expression type\n");return 0;
     }
 }
 
-static ICode inter_trans_number(Ast ast, const char* place)
+static ICode inter_trans_number(Ast ast, const char* ivar)
 {
     ICode ic = icode_assign_new(I_ASSIGN_NUMBER);
-    ic = icode_name_set(ic, place);
+    ic = icode_name_set(ic, ivar);
     ic = icode_number_set(ic, ast->value.number);
     return ic;
 }
 
-static ICode inter_trans_string(Ast ast, const char* place)
+static ICode inter_trans_string(Ast ast, const char* ivar)
 {
     ICode ic = icode_assign_new(I_ASSIGN_STRING);
-    ic = icode_name_set(ic, place);
+    ic = icode_name_set(ic, ivar);
     ic = icode_string_set(ic, ast->value.string);
     return ic;
 }
 
-static ICode inter_trans_boolean(Ast ast, const char* place)
+static ICode inter_trans_boolean(Ast ast, const char* ivar)
 {
     ICode ic = icode_assign_new(I_ASSIGN_BOOLEAN);
-    ic = icode_name_set(ic, place);
+    ic = icode_name_set(ic, ivar);
     ic = icode_boolean_set(ic, ast->value.boolean);
     return ic;
 }
 
-static ICode inter_trans_identifier(Ast ast, const char* place)
+static ICode inter_trans_identifier(Ast ast, const char* ivar)
 {
     ICode ic = icode_assign_new(I_ASSIGN_IDENTIFIER);
-    ic = icode_name_set(ic, place);
+    ic = icode_name_set(ic, ivar);
 
     const char* name = ast->value.identifier;
     SymTab st = symtab_lookup(symbolTable, name);
@@ -139,7 +139,7 @@ static ICode inter_trans_identifier(Ast ast, const char* place)
     return ic;
 }
 
-static ICode inter_trans_binop(Ast ast, const char* place)
+static ICode inter_trans_binop(Ast ast, const char* ivar)
 {
     const char* left = newvar();
     const char* right = newvar();
@@ -148,7 +148,7 @@ static ICode inter_trans_binop(Ast ast, const char* place)
     int op = ast->value.binop.operator->value.operator;
 
     ICode ic = icode_assign_new(I_ASSIGN_BINOP);
-    ic = icode_name_set(ic, place);
+    ic = icode_name_set(ic, ivar);
     ic = icode_binop_set(ic, op, left, right);
 
     ICode r = icode_append(ic_right, ic_left);
