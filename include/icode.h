@@ -4,12 +4,12 @@
 #include <gc.h>
 #include <ast.h>
 
-#define  ICODE_NEW(ic, type, ltype) ICode ic = GC_malloc(sizeof(*ic)); \
+#define  ICODE_NEW(ic, ictype, lytype) ICode ic = GC_malloc(sizeof(*ic)); \
                              if(ic == NULL) { \
                                  return NULL; \
                              } \
-                             ic->type = type; \
-                             ic->ltype = ltype; \
+                             ic->type = ictype; \
+                             ic->ltype = lytype; \
                              ic->tail = NULL; \
                              ic->next = NULL; \
 
