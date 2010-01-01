@@ -141,7 +141,6 @@ static ICode inter_trans_identifier(Ast ast, const char* place)
 
 static ICode inter_trans_binop(Ast ast, const char* place)
 {
-    printf("translating binary operation\n");
     const char* left = newvar();
     const char* right = newvar();
     ICode ic_left = inter_trans_exp(ast->value.binop.left, left);
