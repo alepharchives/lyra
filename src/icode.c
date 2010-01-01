@@ -112,10 +112,10 @@ void icode_printf(ICode ic, int i)
 
     printf("%d: ", i);
     switch(ic->ltype) {
-        case L_NUMBER: printf("NUMBER ");break;
-        case L_STRING: printf("STRING ");break;
-        case L_BOOLEAN: printf("BOOLEAN ");break;
-        default: printf("LINVALID ");
+        case L_NUMBER: printf("num ");break;
+        case L_STRING: printf("str ");break;
+        case L_BOOLEAN: printf("bool ");break;
+        default: printf("LINVALID ");return;
     }
 
     switch(ic->type) {
