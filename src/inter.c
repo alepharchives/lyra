@@ -49,8 +49,8 @@ int inter_translate_program(Ast ast)
 
 static int inter_trans_stmt_assign(Ast ast)
 {
-    const char* name = ast->value.stmt_assign.key->value.identifier;
-    SymTab st = symtab_lookup(symbolTable, name);
+    const char* var = ast->value.stmt_assign.key->value.identifier;
+    SymTab st = symtab_lookup(symbolTable, var);
     const char* ivar = symtab_string_get(st);
 
     ICode rhs = inter_trans_exp(ast->value.stmt_assign.value, ivar);
@@ -62,9 +62,10 @@ static int inter_trans_stmt_assign(Ast ast)
 
 static int inter_trans_stmt_init(Ast ast)
 {
-    const char* name = ast->value.stmt_init.key->value.identifier;
+    const char* var = ast->value.stmt_init.key->value.identifier;
     const char* ivar = newvar();
-    symbolTable = symtab_define(symbolTable, name, L_STRING);
+
+    symbolTable = symtab_define(symbolTable, var, L_STRING);
     symbolTable = symtab_string_set(symbolTable, ivar);
 
     ICode rhs = inter_trans_exp(ast->value.stmt_init.value, ivar);
@@ -132,10 +133,11 @@ static ICode inter_trans_identifier(Ast ast, const char* ivar)
     ICode ic = icode_assign_new(I_ASSIGN_IDENTIFIER);
     ic = icode_name_set(ic, ivar);
 
-    const char* name = ast->value.identifier;
-    SymTab st = symtab_lookup(symbolTable, name);
-    const char* var = symtab_string_get(st);
-    ic = icode_identifier_set(ic, var);
+    const char* var = ast->value.identifier;
+    SymTab st = symtab_lookup(symbolTable, var);
+
+    const char* ivar = symtab_string_get(st);
+    ic = icode_identifier_set(ic, ivar);
     return ic;
 }
 
