@@ -22,12 +22,14 @@ typedef enum {
     I_ASSIGN_NUMBER,
     I_ASSIGN_BOOLEAN,
     I_ASSIGN_IDENTIFIER,
-    I_ASSIGN_BINOP
+    I_ASSIGN_BINOP,
+    I_PRINT
 } ICodeType;
 
 
 ICode icode_new();
 ICode icode_assign_new(ICodeType, LyraType);
+ICode icode_print_new(LyraType);
 ICode icode_append(ICode,ICode);
 ICode icode_name_set(ICode, const char *);
 ICode icode_number_set(ICode, int);

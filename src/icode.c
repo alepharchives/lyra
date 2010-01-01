@@ -38,6 +38,12 @@ ICode icode_assign_new(ICodeType type, LyraType ltype)
     return ic;
 }
 
+ICode icode_print_new(LyraType ltype)
+{
+    ICODE_NEW(ic, I_PRINT, ltype);
+    return ic;
+}
+
 ICode icode_append(ICode head, ICode new)
 {
     if(head == NULL) {
