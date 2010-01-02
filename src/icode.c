@@ -9,7 +9,9 @@ struct _ICode {
     ICodeType type;
     ICodeAssignType atype;
     LyraType ltype;
+
     char* name;
+
     union {
         char* identifier;
         char* string;
