@@ -122,6 +122,74 @@ LyraType icode_ltype_get(ICode ic)
     return ic->ltype;
 }
 
+void icode_printf_type(ICode ic)
+{
+    switch(ic->ltype) {
+        case L_NUMBER: printf("num ");return;
+        case L_STRING: printf("str ");return;
+        case L_BOOLEAN: printf("bool ");return;
+        default: printf("LINVALID ");return;
+    }
+}
+
+void icode_printf_assign(ICode ic)
+{
+    icode_printf_type(ic);
+    printf("%s = ", ic->name);
+
+    if(ic->atype == A_INVALID) {
+        printf("INVALID ASSIGNMENT\n");
+        return;
+    }
+
+    if(ic->atype == A_IDENTIFIER) {
+        printf("%s\n", ic->value.identifier);
+        return;
+    }
+
+    if(ic->atype == A_BINOP) {
+        printf("%s %c %s\n", ic->value.binop.left,
+                ic->value.binop.op,
+                ic->value.binop.right);
+        return;
+    }
+
+    /* All are now A_CONSTANT, so we dip into
+       ltype to check what to print out
+    */
+    if(ic->ltype == L_NUMBER) {
+        printf("%d\n", ic->value.number);
+        return;
+    }
+
+    if(ic->ltype == L_STRING) {
+        printf("%s\n", ic->value.string);
+        return;
+    }
+
+    if(ic->ltype == L_BOOLEAN) {
+        if(ic->value.boolean) {
+            printf("true\n");
+        } else {
+            printf("false\n");
+        }
+    }
+}
+
+void icode_printf_print(ICode ic)
+{
+    printf("PRINT ");
+    icode_printf_type(ic);
+    printf("%s\n", ic->name);
+}
+
+void icode_printf_read(ICode ic)
+{
+    printf("READ ");
+    icode_printf_type(ic);
+    printf("%s\n", ic->name);
+}
+
 void icode_printf(ICode ic, int i)
 {
     if(ic == NULL) {
@@ -129,25 +197,12 @@ void icode_printf(ICode ic, int i)
         return;
     }
 
-    printf("%d: ", i);
-    switch(ic->ltype) {
-        case L_NUMBER: printf("num ");break;
-        case L_STRING: printf("str ");break;
-        case L_BOOLEAN: printf("bool ");break;
-        default: printf("LINVALID ");return;
-    }
+    printf("%3d: ", i);
 
     switch(ic->type) {
-        case I_ASSIGN_STRING: printf("%s = %s\n", ic->name, ic->value.string);break;
-        case I_ASSIGN_NUMBER: printf("%s = %d\n", ic->name, ic->value.number);break;
-        case I_ASSIGN_BOOLEAN: printf("%s = %d\n", ic->name, ic->value.boolean);break;
-        case I_ASSIGN_IDENTIFIER: printf("%s = %s\n", ic->name, ic->value.identifier);break;
-        case I_ASSIGN_BINOP: printf("%s = %s %c %s\n", ic->name,
-                                     ic->value.binop.left,
-                                     ic->value.binop.op,
-                                     ic->value.binop.right);break;
-        case I_PRINT: printf("PRINT %s\n", ic->name);break;
-        case I_READ: printf("READ %s\n", ic->name);break;
+        case I_ASSIGN: icode_printf_assign(ic);break;
+        case I_PRINT: icode_printf_print(ic);break;
+        case I_READ: icode_printf_read(ic);break;
         default: fprintf(stderr, "Unknown Intermediate Code type\n");return;
     }
 
