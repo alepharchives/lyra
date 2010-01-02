@@ -9,6 +9,7 @@
                                  return NULL; \
                              } \
                              ic->type = ictype; \
+                             ic->atype = A_INVALID; \
                              ic->ltype = lytype; \
                              ic->tail = NULL; \
                              ic->next = NULL; \
@@ -18,14 +19,17 @@ typedef struct _ICode* ICode;
 extern ICode iCode;
 
 typedef enum {
-    I_ASSIGN_STRING,
-    I_ASSIGN_NUMBER,
-    I_ASSIGN_BOOLEAN,
-    I_ASSIGN_IDENTIFIER,
-    I_ASSIGN_BINOP,
+    I_ASSIGN,
     I_PRINT,
     I_READ
 } ICodeType;
+
+typedef enum {
+    A_CONSTANT,
+    A_IDENTIFIER,
+    A_BINOP,
+    A_INVALID
+} ICodeAssignType;
 
 
 ICode icode_new();
