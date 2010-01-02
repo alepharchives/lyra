@@ -33,7 +33,7 @@ typedef enum {
 
 
 ICode icode_new();
-ICode icode_assign_new(ICodeType, LyraType);
+ICode icode_assign_new(ICodeAssignType, LyraType);
 ICode icode_print_new(LyraType);
 ICode icode_read_new(LyraType);
 ICode icode_append(ICode,ICode);

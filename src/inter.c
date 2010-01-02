@@ -207,7 +207,7 @@ static ICode inter_trans_exp(Ast ast, const char* ivar)
 
 static ICode inter_trans_number(Ast ast, const char* ivar)
 {
-    ICode ic = icode_assign_new(I_ASSIGN_NUMBER, L_NUMBER);
+    ICode ic = icode_assign_new(A_CONSTANT, L_NUMBER);
     ic = icode_name_set(ic, ivar);
     ic = icode_number_set(ic, ast->value.number);
     return ic;
@@ -215,7 +215,7 @@ static ICode inter_trans_number(Ast ast, const char* ivar)
 
 static ICode inter_trans_string(Ast ast, const char* ivar)
 {
-    ICode ic = icode_assign_new(I_ASSIGN_STRING, L_STRING);
+    ICode ic = icode_assign_new(A_CONSTANT, L_STRING);
     ic = icode_name_set(ic, ivar);
     ic = icode_string_set(ic, ast->value.string);
     return ic;
@@ -223,7 +223,7 @@ static ICode inter_trans_string(Ast ast, const char* ivar)
 
 static ICode inter_trans_boolean(Ast ast, const char* ivar)
 {
-    ICode ic = icode_assign_new(I_ASSIGN_BOOLEAN, L_BOOLEAN);
+    ICode ic = icode_assign_new(A_CONSTANT, L_BOOLEAN);
     ic = icode_name_set(ic, ivar);
     ic = icode_boolean_set(ic, ast->value.boolean);
     return ic;
@@ -239,7 +239,7 @@ static ICode inter_trans_identifier(Ast ast, const char* ivar)
     SymTab st2 = symtab_lookup(symbolTable, ivar2);
     LyraType ltype = symtab_type_get(st2);
 
-    ICode ic = icode_assign_new(I_ASSIGN_IDENTIFIER, ltype);
+    ICode ic = icode_assign_new(A_IDENTIFIER, ltype);
 
     ic = icode_name_set(ic, ivar);
     ic = icode_identifier_set(ic, ivar2);
@@ -257,7 +257,7 @@ static ICode inter_trans_binop(Ast ast, const char* ivar)
 
     LyraType ltype = op2type(op);
 
-    ICode ic = icode_assign_new(I_ASSIGN_BINOP, ltype);
+    ICode ic = icode_assign_new(A_BINOP, ltype);
     ic = icode_name_set(ic, ivar);
     ic = icode_binop_set(ic, op, left, right);
 

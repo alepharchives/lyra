@@ -33,9 +33,10 @@ ICode icode_new()
     return NULL;
 }
 
-ICode icode_assign_new(ICodeType type, LyraType ltype)
+ICode icode_assign_new(ICodeAssignType atype, LyraType ltype)
 {
-    ICODE_NEW(ic, type, ltype);
+    ICODE_NEW(ic, I_ASSIGN, ltype);
+    ic->atype = atype;
     return ic;
 }
 
