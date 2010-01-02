@@ -27,6 +27,15 @@
                       } \
                       if(1) \
 
+#define TRY_TRANSLATE_TO_IR() symbolTable = symtab_new(); \
+                            iCode = icode_new(); \
+                            \
+                            if(!inter_translate_program(rootAst)) { \
+                                return -1; \
+                            } \
+                            if(1) \
+                              
+
 void usage();
 int check_fname(const char*);
 char* get_fname_from(const char*, const char*);
