@@ -11,4 +11,6 @@ int main(int argc, char** argv)
     TRY_TYPECHECK();
 
     ast_printf(rootAst, 0);
+
+    return 0;
 }
