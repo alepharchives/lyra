@@ -1,5 +1,5 @@
 OBJECTS=../bin/lyrac \
-        ../bin/lyraast \
+        ../bin/lyra2ast \
         ../bin/lyra2ir
 
 all: $(OBJECTS)
@@ -13,8 +13,8 @@ CFLAGS=-I../include -L../bin
 	@mkdir -p ../bin
 	$(AR) -rcs $@ $+
 
-../bin/lyraast: ../bin/liblyra.a lyraast.o
-	$(CC) $(CFLAGS) -o $@ lyraast.o -lgc -llyra
+../bin/lyra2ast: ../bin/liblyra.a lyra2ast.o
+	$(CC) $(CFLAGS) -o $@ lyra2ast.o -lgc -llyra
 
 ../bin/lyra2ir: ../bin/liblyra.a lyra2ir.o
 	$(CC) $(CFLAGS) -o $@ lyra2ir.o -lgc -llyra
