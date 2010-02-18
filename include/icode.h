@@ -39,7 +39,7 @@ struct _ICode {
     char* name;
 
     union {
-        union {
+        struct {
             LyraType ltype;
             char* value;
         } identifier;
@@ -48,12 +48,12 @@ struct _ICode {
         LyraBoolean boolean;
 
         struct {
-            union {
+            struct {
                 LyraType ltype;
                 char* value;
             } left;
             int op;
-            union {
+            struct {
                 LyraType ltype;
                 char* value;
             } right;

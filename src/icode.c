@@ -125,14 +125,14 @@ void icode_printf_assign(ICode ic)
     }
 
     if(ic->atype == A_IDENTIFIER) {
-        printf("%s\n", ic->value.identifier);
+        printf("%s\n", ic->value.identifier.value);
         return;
     }
 
     if(ic->atype == A_BINOP) {
-        printf("%s %c %s\n", ic->value.binop.left,
+        printf("%s %c %s\n", ic->value.binop.left.value,
                 ic->value.binop.op,
-                ic->value.binop.right);
+                ic->value.binop.right.value);
         return;
     }
 
