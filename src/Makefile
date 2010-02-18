@@ -9,7 +9,7 @@ CC=gcc
 AR=ar
 CFLAGS=-I../include -L../bin
 
-../bin/liblyra.a: y.tab.o lex.yy.o ast.o util.o symtab.o semantic.o icode.o inter.o
+../bin/liblyra.a: y.tab.o lex.yy.o ast.o util.o symtab.o semantic.o icode.o inter.o pirgen.o
 	@mkdir -p ../bin
 	$(AR) -rcs $@ $+
 
