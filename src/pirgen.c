@@ -26,7 +26,7 @@ void pirgen_assign(ICode ic)
 
     if(ic->atype == A_IDENTIFIER) {
         pirgen_type(ic->value.identifier.ltype);
-        printf("%s\n", ic->value.identifier+1);
+        printf("%s\n", ic->value.identifier.value+1);
         return;
     }
 
