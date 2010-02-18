@@ -31,6 +31,39 @@ typedef enum {
     A_INVALID
 } ICodeAssignType;
 
+struct _ICode {
+    ICodeType type;
+    ICodeAssignType atype;
+    LyraType ltype;
+
+    char* name;
+
+    union {
+        union {
+            LyraType ltype;
+            char* value;
+        } identifier;
+        char* string;
+        int number;
+        LyraBoolean boolean;
+
+        struct {
+            union {
+                LyraType ltype;
+                char* value;
+            } left;
+            int op;
+            union {
+                LyraType ltype;
+                char* value;
+            } right;
+        } binop;
+    } value;
+
+    ICode next;
+    ICode tail;
+};
+
 
 ICode icode_new();
 ICode icode_assign_new(ICodeAssignType, LyraType);
