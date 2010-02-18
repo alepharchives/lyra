@@ -242,7 +242,7 @@ static ICode inter_trans_identifier(Ast ast, const char* ivar)
     ICode ic = icode_assign_new(A_IDENTIFIER, ltype);
 
     ic = icode_name_set(ic, ivar);
-    ic = icode_identifier_set(ic, ivar2);
+    ic = icode_identifier_set(ic, ivar2, ltype);
 
     return ic;
 }
@@ -259,7 +259,7 @@ static ICode inter_trans_binop(Ast ast, const char* ivar)
 
     ICode ic = icode_assign_new(A_BINOP, ltype);
     ic = icode_name_set(ic, ivar);
-    ic = icode_binop_set(ic, op, left, right);
+    ic = icode_binop_set(ic, op, left, right, ltype);
 
     ICode r = icode_append(ic_right, ic_left);
     r = icode_append(r, ic);
