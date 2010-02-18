@@ -41,8 +41,8 @@ ICode icode_name_set(ICode, const char *);
 ICode icode_number_set(ICode, int);
 ICode icode_string_set(ICode, const char*);
 ICode icode_boolean_set(ICode, LyraBoolean);
-ICode icode_identifier_set(ICode, const char*);
-ICode icode_binop_set(ICode, int, const char*, const char*);
+ICode icode_identifier_set(ICode, const char*,LyraType);
+ICode icode_binop_set(ICode, int, const char*, const char*,LyraType);
 
 LyraType icode_ltype_get(ICode);
 

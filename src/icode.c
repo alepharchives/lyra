@@ -114,17 +114,20 @@ ICode icode_boolean_set(ICode ic, LyraBoolean b)
     return ic;
 }
 
-ICode icode_identifier_set(ICode ic, const char *id)
+ICode icode_identifier_set(ICode ic, const char *id, LyraType ltype)
 {
-    ic->value.identifier = strndup(id, 255);
+    ic->value.identifier.value = strndup(id, 255);
+    ic->value.identifier.ltype = ltype;
     return ic;
 }
 
-ICode icode_binop_set(ICode ic, int op, const char* left, const char* right)
+ICode icode_binop_set(ICode ic, int op, const char* left, const char* right, LyraType ltype)
 {
-    ic->value.binop.left = strndup(left, 255);
+    ic->value.binop.left.value = strndup(left, 255);
+    ic->value.binop.left.ltype = ltype;
     ic->value.binop.op = op;
-    ic->value.binop.right = strndup(right, 255);
+    ic->value.binop.right.value = strndup(right, 255);
+    ic->value.binop.right.ltype = ltype;
     return ic;
 }
 
