@@ -13,15 +13,24 @@ struct _ICode {
     char* name;
 
     union {
-        char* identifier;
+        union {
+            LyraType ltype;
+            char* value;
+        } identifier;
         char* string;
         int number;
         LyraBoolean boolean;
 
         struct {
-            char* left;
+            union {
+                LyraType ltype;
+                char* value;
+            } left;
             int op;
-            char* right;
+            union {
+                LyraType ltype;
+                char* value;
+            } right;
         } binop;
     } value;
 
