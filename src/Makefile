@@ -1,6 +1,7 @@
 OBJECTS=../bin/lyrac \
         ../bin/lyra2ast \
-        ../bin/lyra2ir
+        ../bin/lyra2ir \
+        ../bin/lyra2pir
 
 all: $(OBJECTS)
 	@echo "All done"
@@ -18,6 +19,9 @@ CFLAGS=-I../include -L../bin
 
 ../bin/lyra2ir: ../bin/liblyra.a lyra2ir.o
 	$(CC) $(CFLAGS) -o $@ lyra2ir.o -lgc -llyra
+
+../bin/lyra2pir: ../bin/liblyra.a lyra2pir.o
+	$(CC) $(CFLAGS) -o $@ lyra2pir.o -lgc -llyra
 
 ../bin/lyrac: ../bin/liblyra.a lyrac.o
 	$(CC) $(CFLAGS) -o $@ lyrac.o -lgc -llyra
